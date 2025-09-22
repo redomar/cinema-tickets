@@ -74,6 +74,11 @@ public class TicketServiceImpl implements TicketService {
             throw new InvalidPurchaseException();
         }
 
+        // RULE: Infants must sit on parent's Lap
+        if (ticketRecord.totalInfantTickets() > 0 && ticketRecord.totalInfantTickets() > ticketRecord.totalAdultTickets()) {
+            throw new InvalidPurchaseException();
+        }
+
     }
 
     @SuppressWarnings("ConstantConditions")

@@ -67,14 +67,14 @@ class TicketServiceImplTest {
         TicketTypeRequest child2GroupTickets = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 2);
         TicketTypeRequest child3GroupTickets = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 3);
         TicketTypeRequest infant1GroupTickets = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 1);
-        TicketTypeRequest rugratsGroupTickets = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 7);
+        TicketTypeRequest rugratsGroupTickets = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 5);
 
         ticketService.purchaseTickets(ACCOUNT_ID, adults1GroupTickets, adults2GroupTickets, adults3GroupTickets, child1GroupTickets, child2GroupTickets, child3GroupTickets, infant1GroupTickets, rugratsGroupTickets);
 
         // 6 Adults, Price 6*25, Seats 6, Tickets 6
         // 6 Children, Price 6*15, Seats 6, Tickets 6
-        // 8 Infants, Price 0, Seats 0, Tickets 8
-        // 20, 6*25+6*15, Seats 12, Tickets 6+6
+        // 8 Infants, Price 0, Seats 0, Tickets 5
+        // 20, 6*25+6*15, Seats 12, Tickets 6+6+5
         verify(ticketPaymentService).makePayment(ACCOUNT_ID, 240);
         verify(seatReservationService).reserveSeat(ACCOUNT_ID, 12);
     }
@@ -85,7 +85,7 @@ class TicketServiceImplTest {
     void shouldNotChargeInfantsOrAllocateSeats() {
         long ACCOUNT_ID = 1L;
         TicketTypeRequest parentTickets = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 2);
-        TicketTypeRequest rugrats = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 7);
+        TicketTypeRequest rugrats = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 2);
 
         ticketService.purchaseTickets(ACCOUNT_ID, parentTickets, rugrats);
 
@@ -243,6 +243,19 @@ class TicketServiceImplTest {
         TicketTypeRequest negativeTickets = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, -1);
 
         assertThrows(InvalidPurchaseException.class, () -> ticketService.purchaseTickets(ACCOUNT_ID, negativeTickets));
+
+        verifyNoInteractions(ticketPaymentService);
+        verifyNoInteractions(seatReservationService);
+    }
+
+    @Test
+    void shouldThrowExceptionForMoreInfantsThanAdults() {
+        // Infants must sit on adults lap
+        Long ACCOUNT_ID = 1L;
+        TicketTypeRequest adultTickets = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 5);
+        TicketTypeRequest infantTickets = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 6);
+
+        assertThrows(InvalidPurchaseException.class, () -> ticketService.purchaseTickets(ACCOUNT_ID, adultTickets, infantTickets));
 
         verifyNoInteractions(ticketPaymentService);
         verifyNoInteractions(seatReservationService);
