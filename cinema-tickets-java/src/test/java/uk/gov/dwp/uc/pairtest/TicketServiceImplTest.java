@@ -69,14 +69,7 @@ class TicketServiceImplTest {
         TicketTypeRequest infant1GroupTickets = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 1);
         TicketTypeRequest rugratsGroupTickets = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 7);
 
-        ticketService.purchaseTickets(ACCOUNT_ID, adults1GroupTickets,
-                adults2GroupTickets,
-                adults3GroupTickets,
-                child1GroupTickets,
-                child2GroupTickets,
-                child3GroupTickets,
-                infant1GroupTickets,
-                rugratsGroupTickets);
+        ticketService.purchaseTickets(ACCOUNT_ID, adults1GroupTickets, adults2GroupTickets, adults3GroupTickets, child1GroupTickets, child2GroupTickets, child3GroupTickets, infant1GroupTickets, rugratsGroupTickets);
 
         // 6 Adults, Price 6*25, Seats 6, Tickets 6
         // 6 Children, Price 6*15, Seats 6, Tickets 6
@@ -141,8 +134,7 @@ class TicketServiceImplTest {
         Long ACCOUNT_ID = 1L;
         TicketTypeRequest childTickets = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 2);
 
-        assertThrows(InvalidPurchaseException.class, () ->
-                ticketService.purchaseTickets(ACCOUNT_ID, childTickets));
+        assertThrows(InvalidPurchaseException.class, () -> ticketService.purchaseTickets(ACCOUNT_ID, childTickets));
 
         verifyNoInteractions(ticketPaymentService);
         verifyNoInteractions(seatReservationService);
@@ -153,8 +145,7 @@ class TicketServiceImplTest {
         Long ACCOUNT_ID = 1L;
         TicketTypeRequest rugrats = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 7);
 
-        assertThrows(InvalidPurchaseException.class, () ->
-                ticketService.purchaseTickets(ACCOUNT_ID, rugrats));
+        assertThrows(InvalidPurchaseException.class, () -> ticketService.purchaseTickets(ACCOUNT_ID, rugrats));
 
         verifyNoInteractions(ticketPaymentService);
         verifyNoInteractions(seatReservationService);
@@ -166,8 +157,7 @@ class TicketServiceImplTest {
         TicketTypeRequest kids = new TicketTypeRequest(TicketTypeRequest.Type.CHILD, 2);
         TicketTypeRequest rugrats = new TicketTypeRequest(TicketTypeRequest.Type.INFANT, 5);
 
-        assertThrows(InvalidPurchaseException.class, () ->
-                ticketService.purchaseTickets(ACCOUNT_ID, kids, rugrats));
+        assertThrows(InvalidPurchaseException.class, () -> ticketService.purchaseTickets(ACCOUNT_ID, kids, rugrats));
 
         verifyNoInteractions(ticketPaymentService);
         verifyNoInteractions(seatReservationService);
@@ -177,8 +167,7 @@ class TicketServiceImplTest {
     void shouldThrowExceptionForNullAccountId() {
         TicketTypeRequest adultTickets = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 1);
 
-        assertThrows(InvalidPurchaseException.class, () ->
-                ticketService.purchaseTickets(null, adultTickets));
+        assertThrows(InvalidPurchaseException.class, () -> ticketService.purchaseTickets(null, adultTickets));
 
         verifyNoInteractions(ticketPaymentService);
         verifyNoInteractions(seatReservationService);
@@ -189,8 +178,7 @@ class TicketServiceImplTest {
         Long ACCOUNT_ID = 0L;
         TicketTypeRequest adultTickets = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 1);
 
-        assertThrows(InvalidPurchaseException.class, () ->
-                ticketService.purchaseTickets(ACCOUNT_ID, adultTickets));
+        assertThrows(InvalidPurchaseException.class, () -> ticketService.purchaseTickets(ACCOUNT_ID, adultTickets));
 
         verifyNoInteractions(ticketPaymentService);
         verifyNoInteractions(seatReservationService);
@@ -201,8 +189,7 @@ class TicketServiceImplTest {
         Long ACCOUNT_ID = -1L;
         TicketTypeRequest adultTickets = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 1);
 
-        assertThrows(InvalidPurchaseException.class, () ->
-                ticketService.purchaseTickets(ACCOUNT_ID, adultTickets));
+        assertThrows(InvalidPurchaseException.class, () -> ticketService.purchaseTickets(ACCOUNT_ID, adultTickets));
 
         verifyNoInteractions(ticketPaymentService);
         verifyNoInteractions(seatReservationService);
@@ -212,8 +199,7 @@ class TicketServiceImplTest {
     void shouldThrowExceptionForNullTicketRequests() {
         Long ACCOUNT_ID = 1L;
 
-        assertThrows(InvalidPurchaseException.class, () ->
-                ticketService.purchaseTickets(ACCOUNT_ID, (TicketTypeRequest[]) null));
+        assertThrows(InvalidPurchaseException.class, () -> ticketService.purchaseTickets(ACCOUNT_ID, (TicketTypeRequest[]) null));
 
         verifyNoInteractions(ticketPaymentService);
         verifyNoInteractions(seatReservationService);
@@ -223,8 +209,7 @@ class TicketServiceImplTest {
     void shouldThrowExceptionForEmptyTicketRequests() {
         Long ACCOUNT_ID = 1L;
 
-        assertThrows(InvalidPurchaseException.class, () ->
-                ticketService.purchaseTickets(ACCOUNT_ID));
+        assertThrows(InvalidPurchaseException.class, () -> ticketService.purchaseTickets(ACCOUNT_ID));
 
         verifyNoInteractions(ticketPaymentService);
         verifyNoInteractions(seatReservationService);
@@ -235,8 +220,7 @@ class TicketServiceImplTest {
         Long ACCOUNT_ID = 1L;
         TicketTypeRequest adultTickets = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 1);
 
-        assertThrows(InvalidPurchaseException.class, () ->
-                ticketService.purchaseTickets(ACCOUNT_ID, adultTickets, null));
+        assertThrows(InvalidPurchaseException.class, () -> ticketService.purchaseTickets(ACCOUNT_ID, adultTickets, null));
 
         verifyNoInteractions(ticketPaymentService);
         verifyNoInteractions(seatReservationService);
@@ -247,8 +231,7 @@ class TicketServiceImplTest {
         Long ACCOUNT_ID = 1L;
         TicketTypeRequest zeroTickets = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, 0);
 
-        assertThrows(InvalidPurchaseException.class, () ->
-                ticketService.purchaseTickets(ACCOUNT_ID, zeroTickets));
+        assertThrows(InvalidPurchaseException.class, () -> ticketService.purchaseTickets(ACCOUNT_ID, zeroTickets));
 
         verifyNoInteractions(ticketPaymentService);
         verifyNoInteractions(seatReservationService);
@@ -259,8 +242,7 @@ class TicketServiceImplTest {
         Long ACCOUNT_ID = 1L;
         TicketTypeRequest negativeTickets = new TicketTypeRequest(TicketTypeRequest.Type.ADULT, -1);
 
-        assertThrows(InvalidPurchaseException.class, () ->
-                ticketService.purchaseTickets(ACCOUNT_ID, negativeTickets));
+        assertThrows(InvalidPurchaseException.class, () -> ticketService.purchaseTickets(ACCOUNT_ID, negativeTickets));
 
         verifyNoInteractions(ticketPaymentService);
         verifyNoInteractions(seatReservationService);
