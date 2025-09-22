@@ -13,7 +13,7 @@ public class TicketServiceImpl implements TicketService {
     // CONSTANTS FOR PRICES
     private static final int MAX_TICKETS_PER_CUSTOMER = 25;
     private static final int TICKET_FOR_ADULT = 25;
-    private static final int TICKET_FOR_CHILD = 25;
+    private static final int TICKET_FOR_CHILD = 15;
     private static final int TICKER_FOR_INFANT = 0;
 
     // THIRD PARTY SERVICES
@@ -50,14 +50,14 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
-    private void validateTicketTypeRequest(TicketTypeRequest[] ticketTypeRequests) {
+    private void validateTicketTypeRequest(TicketTypeRequest... ticketTypeRequests) {
         // Check if we have tickets
         if (ticketTypeRequests == null || ticketTypeRequests.length == 0) {
             throw new InvalidPurchaseException();
         }
         // Check individual request for tickets
         for (TicketTypeRequest ticketTypeRequest : ticketTypeRequests) {
-            if (ticketTypeRequest.getNoOfTickets() <= 0) {
+            if (ticketTypeRequest == null || ticketTypeRequest.getNoOfTickets() <= 0) {
                 throw new InvalidPurchaseException();
             }
         }
@@ -70,14 +70,14 @@ public class TicketServiceImpl implements TicketService {
         }
 
         // RULE: No more than 25 tickets in one purchase
-        if (ticketRecord.totalTickets() >= MAX_TICKETS_PER_CUSTOMER) {
+        if (ticketRecord.totalTickets() > MAX_TICKETS_PER_CUSTOMER) {
             throw new InvalidPurchaseException();
         }
 
     }
 
     @SuppressWarnings("ConstantConditions")
-    private TICKET_RECORD calculateTickets(TicketTypeRequest[] ticketTypeRequests) {
+    private TICKET_RECORD calculateTickets(TicketTypeRequest... ticketTypeRequests) {
         int totalPrice = 0, totalSeats = 0, totalTickets = 0, totalAdultTickets = 0, totalChildTickets = 0, totalInfantTickets = 0;
 
         for (TicketTypeRequest ticketTypeRequest : ticketTypeRequests) {
